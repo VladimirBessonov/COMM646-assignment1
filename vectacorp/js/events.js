@@ -94,32 +94,75 @@ $(document).ready(function(){
         }
     )
 // STEP 25
-    $("form").validate({
-
-        // Specify validation rules
-        rules: {
-            // The key name on the left side is the name attribute
-            // of an input field. Validation rules are defined
-            // on the right side
-            name: "required",
-            email: {
-                required: true,
-                // Specify that email should be validated
-                // by the built-in "email" rule
-                email: true
+//     $("form").validate({
+//
+//         // Specify validation rules
+//         rules: {
+//             // The key name on the left side is the name attribute
+//             // of an input field. Validation rules are defined
+//             // on the right side
+//             name: "required",
+//             email: {
+//                 required: true,
+//                 // Specify that email should be validated
+//                 // by the built-in "email" rule
+//                 email: true
+//             }
+//         },
+//         // Specify validation error messages
+//         messages: {
+//             name: "Please enter your firstname",
+//             email: "Please enter a valid email address"
+//         },
+//         // Make sure the form is submitted to the destination defined
+//         // in the "action" attribute of the form when valid
+//
+//         submitHandler: function(form) {
+//             form.submit();
+//         }
+//     });
+    $('form').submit(
+        function (event) {
+            var isValid = true;
+            var emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b/;
+            var email = $("#email").val().trim();
+            if (email == "") {
+                $("#email").next().text("This field is required.");
+                $("#email").css('border-color', 'red')
+                isValid = false;
+            } else if ( !emailPattern.test(email) ) {
+                $("#email").next().text("Must be a valid email address.");
+                isValid = false;
+            } else {
+                $("#email").next().text("");
+                $("#email").css('border-color', 'green')
             }
-        },
-        // Specify validation error messages
-        messages: {
-            name: "Please enter your firstname",
-            email: "Please enter a valid email address"
-        },
-        // Make sure the form is submitted to the destination defined
-        // in the "action" attribute of the form when valid
+            $("#email").val(email);
+            var firstName = $("#name").val().trim();
+            if (firstName == "") {
+                $("#name").next().text("This field is required.");
+                $("#name").css('border-color', 'red')
+                isValid = false;
+            } else {
+                $("#name").next().text("");
+                $("#name").css('border-color', 'green')
+            }
+            $("#name").val(firstName);
+            if (isValid == false) {
+                event.preventDefault();
+                if (firstName == "" || email == "") {
 
-        submitHandler: function(form) {
-            form.submit();
+                    alert('All fields are required')
+                }
+                console.log('not valid form')
+            }
+            if (isValid == true) {
+                event.preventDefault();
+                console.log('valid form submitted')
+            }
+
         }
-    });
+    )
+
 });
 
